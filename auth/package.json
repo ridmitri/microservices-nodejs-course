@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --poll src/index.ts"
+    "start": "ts-node-dev --poll src/index.ts",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +23,11 @@
     "mongoose": "^7.0.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/supertest": "^2.0.12",
+    "mongodb-memory-server": "^8.12.1",
+    "supertest": "^6.3.3",
+    "vitest": "^0.29.8"
   }
 }
