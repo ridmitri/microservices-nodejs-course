@@ -1,8 +1,9 @@
-import { beforeAll, beforeEach, afterEach } from 'vitest';
+import { beforeAll, beforeEach, afterAll } from 'vitest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
 import { app } from '../app';
+import request from 'supertest';
 
 let mongo: any;
 
@@ -23,9 +24,30 @@ beforeEach(async () => {
   }
 });
 
-afterEach(async () => {
+afterAll(async () => {
   if (mongo) {
     await mongo.stop();
   }
   await mongoose.connection.close();
 });
+
+declare global {
+  var signin: () => Promise<string[]>;
+}
+
+global.signin = async () => {
+  const email = 'test@test.com';
+  const password = '1234';
+
+  const response = await request(app)
+    .post('/api/users/signup')
+    .send({
+      email: 'test@test.com',
+      password: '1234',
+    })
+    .expect(201);
+
+  const cookie = response.get('Set-Cookie');
+
+  return cookie;
+};
