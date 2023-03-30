@@ -10,7 +10,7 @@ build:
   googleCloudBuild:
     projectId: ticketings
   artifacts:
-    - image:  us.gcr.io/ticketings/auth
+    - image: us.gcr.io/ticketings/auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -18,7 +18,15 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image:  us.gcr.io/ticketings/client
+    - image: us.gcr.io/ticketings/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: us.gcr.io/ticketings/client
       context: client
       docker:
         dockerfile: Dockerfile
