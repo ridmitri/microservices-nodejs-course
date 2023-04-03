@@ -13,7 +13,7 @@ router.post(
     body('title').not().isEmpty().withMessage('Title is required'),
     body('price')
       .isFloat({ gt: 0 })
-      .withMessage('Price must be greater than zero'),
+      .withMessage('Price must be greater than 0'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ router.post(
 
     await ticket.save();
 
-    res.send(201).send(ticket);
+    res.status(201).send(ticket);
   }
 );
 

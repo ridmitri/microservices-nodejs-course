@@ -2,6 +2,8 @@ import { beforeAll, beforeEach, afterAll } from 'vitest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import request from 'supertest';
+import { app } from '@/app';
 
 let mongo: any;
 
@@ -48,3 +50,14 @@ global.signin = () => {
 
   return [`session=${base64}`];
 };
+
+const testapi = {
+  get(url: string) {
+    return request(app).get(url).set('Cookie', global.signin());
+  },
+  post(url: string) {
+    return request(app).post(url).set('Cookie', global.signin());
+  },
+};
+
+export default testapi;
