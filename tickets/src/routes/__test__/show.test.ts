@@ -1,9 +1,8 @@
 import { it, expect } from 'vitest';
-import testapi from '@/test/setup';
-import mongoose from 'mongoose';
+import testapi, { objectId } from '@/test/setup';
 
 it('returns 404 is the ticket is not found', async () => {
-  const id = new mongoose.Types.ObjectId().toHexString();
+  const id = objectId();
   await testapi.get(`/api/tickets/${id}`).send({}).expect(404);
 });
 

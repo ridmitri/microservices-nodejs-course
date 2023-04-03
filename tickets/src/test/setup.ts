@@ -1,7 +1,7 @@
-import { beforeAll, beforeEach, afterAll } from 'vitest';
+import { beforeAll, beforeEach, afterAll, afterEach } from 'vitest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
+import jwt, { sign } from 'jsonwebtoken';
 import request from 'supertest';
 import { app } from '@/app';
 
@@ -31,15 +31,16 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-declare global {
-  var signin: () => string[];
-}
+let cookie: string[] = [];
 
-global.signin = () => {
+const signin = () => {
+  if (cookie.length) {
+    return cookie;
+  }
   // build a jwt payload
   const payload = {
     email: 'john@test.com',
-    id: '6425680728c96de4b52b119f',
+    id: new mongoose.Types.ObjectId().toHexString(),
   };
   //Create the JWT
   const session = {
@@ -48,16 +49,42 @@ global.signin = () => {
   const sessionJSON = JSON.stringify(session);
   const base64 = Buffer.from(sessionJSON).toString('base64');
 
-  return [`session=${base64}`];
+  cookie = [`session=${base64}`];
+  return cookie;
 };
 
+afterEach(() => {
+  cookie = [];
+});
+
 const testapi = {
+  signout() {
+    cookie = [];
+  },
   get(url: string) {
-    return request(app).get(url).set('Cookie', global.signin());
+    return request(app).get(url).set('Cookie', signin());
   },
   post(url: string) {
-    return request(app).post(url).set('Cookie', global.signin());
+    return request(app).post(url).set('Cookie', signin());
+  },
+  put(url: string) {
+    return request(app).put(url).set('Cookie', signin());
+  },
+  anonymized: {
+    get(url: string) {
+      return request(app).get(url).set('Cookie', []);
+    },
+    post(url: string) {
+      return request(app).post(url).set('Cookie', []);
+    },
+    put(url: string) {
+      return request(app).put(url).set('Cookie', []);
+    },
   },
 };
 
 export default testapi;
+
+export const objectId = () => {
+  return new mongoose.Types.ObjectId().toHexString();
+};

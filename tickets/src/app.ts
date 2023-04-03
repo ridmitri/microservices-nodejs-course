@@ -5,6 +5,8 @@ import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@unlimited-js/common';
 import { createTicketRouter } from './routes/new';
 import { showTicketsRouter } from './routes/show';
+import { indexTickesRouter } from './routes/index';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(
 app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketsRouter);
+app.use(indexTickesRouter);
+app.use(updateTicketRouter);
 
 app.all('*', async () => {
   throw new NotFoundError();
