@@ -28,3 +28,9 @@ For running on GKE
 1. [Setup Ingress controller](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start)
 2. Add JWT secret in the cluster `kubectl create secret generic jwt-secret --from-literal JWT_KEY=asdf`
 
+## Connect kubectl to GKE from local machine
+
+1. Go to Kubernetes Engine page and select the cluster.
+2. Press on >_Connect to open a cloud console.
+3. Copy gcloud authorization command to local terminal. It will swtich local kubectl context to gcloud, e.g. `gcloud container clusters get-credentials ticketing-dev --zone europe-west3-a --project ticketings`.
+4. Troubleshoot: Make sure gcloud is logged in.

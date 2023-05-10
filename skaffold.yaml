@@ -6,17 +6,17 @@ deploy:
       - ./infra/k8s/*
 build:
   # Docker
-  local:
-    push: false
+  # local:
+  #   push: false
   #  /Docker
 
   # Google cloud 
-  # googleCloudBuild:
-  #   projectId: ticketings
+  googleCloudBuild:
+    projectId: ticketings
   # /Google cloud 
   artifacts:
-    - image: ridmitri/auth
-    # - image: us.gcr.io/ticketings/auth    
+    # - image: ridmitri/auth
+    - image: us.gcr.io/ticketings/auth    
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -24,8 +24,8 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ridmitri/tickets
-    # - image: us.gcr.io/ticketings/tickets
+    # - image: ridmitri/tickets
+    - image: us.gcr.io/ticketings/tickets
       context: tickets
       docker:
         dockerfile: Dockerfile
@@ -33,8 +33,8 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ridmitri/client-ticketing
-    # - image: us.gcr.io/ticketings/client
+    # - image: ridmitri/client-ticketing
+    - image: us.gcr.io/ticketings/client
       context: client
       docker:
         dockerfile: Dockerfile
