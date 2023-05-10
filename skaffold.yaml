@@ -33,6 +33,15 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    # - image: ridmitri/orders
+    - image: us.gcr.io/ticketings/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     # - image: ridmitri/client-ticketing
     - image: us.gcr.io/ticketings/client
       context: client

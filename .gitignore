@@ -4,3 +4,4 @@ node_modules
 .secrets
 common
 nats-test
+.DS_Store

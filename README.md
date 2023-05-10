@@ -34,3 +34,11 @@ For running on GKE
 2. Press on >_Connect to open a cloud console.
 3. Copy gcloud authorization command to local terminal. It will swtich local kubectl context to gcloud, e.g. `gcloud container clusters get-credentials ticketing-dev --zone europe-west3-a --project ticketings`.
 4. Troubleshoot: Make sure gcloud is logged in.
+
+## Setup a new service
+
+1. Create a source folder
+2. Build an image
+3. Create a k8s deployment and service
+4. Setup routing in the ingress service
+5. Update skaffold config
