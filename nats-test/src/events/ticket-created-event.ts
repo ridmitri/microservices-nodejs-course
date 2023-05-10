@@ -8,3 +8,12 @@ export interface TicketCreatedEvent {
     price: number;
   };
 }
+
+export interface TicketUpdatedEvent {
+  subject: Subjects.TicketUpdated;
+  data: {
+    id: string;
+    title: string;
+    price: number;
+  };
+}

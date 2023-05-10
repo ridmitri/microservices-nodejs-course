@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, afterAll, afterEach } from 'vitest';
+import { beforeAll, beforeEach, afterAll, afterEach, vi } from 'vitest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt, { sign } from 'jsonwebtoken';
@@ -16,7 +16,10 @@ beforeAll(async () => {
   await mongoose.connect(mongoUri, {});
 });
 
+vi.mock('../nats-wrapper');
+
 beforeEach(async () => {
+  vi.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {

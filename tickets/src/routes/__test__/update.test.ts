@@ -1,5 +1,6 @@
 import testapi, { objectId } from '@/test/setup';
 import { it, expect } from 'vitest';
+import { natsWrapper } from '@/nats-wrapper';
 
 it('returns 404 if the provided id does not exist', async () => {
   const id = objectId();
@@ -92,4 +93,19 @@ it('updates the ticket provided valid inputs', async () => {
 
   expect(updatedTicket.body.title).toEqual(title);
   expect(updatedTicket.body.price).toEqual(price);
+});
+
+it('published an event', async () => {
+  const title = 'Valid title';
+  const price = 20;
+
+  await testapi
+    .post('/api/tickets')
+    .send({
+      title,
+      price,
+    })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
