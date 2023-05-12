@@ -56,3 +56,5 @@ it('reserves a ticket', async () => {
   expect(body.ticket.title).toEqual(ticket.title);
   expect(body.ticket.price).toEqual(ticket.price);
 });
+
+it.todo('emits an order created event');
