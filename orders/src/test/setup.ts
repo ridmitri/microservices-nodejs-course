@@ -69,6 +69,10 @@ class Testapi {
     return request(app).post(url).set('Cookie', this.signin());
   }
 
+  delete(url: string) {
+    return request(app).delete(url).set('Cookie', this.signin());
+  }
+
   put(url: string) {
     return request(app).put(url).set('Cookie', this.signin());
   }

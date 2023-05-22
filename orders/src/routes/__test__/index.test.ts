@@ -1,6 +1,5 @@
 import { it, expect } from 'vitest';
 import testapi from '@/test/setup';
-import { Order, OrderStatus } from '@/models/order';
 import { Ticket } from '@/models/ticket';
 
 const buildTicket = async () => {
