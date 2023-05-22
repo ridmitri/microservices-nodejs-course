@@ -34,65 +34,59 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-class Testapi {
-  private cookie: string[] = [];
+let cookie: string[] = [];
 
-  private signin(): string[] {
-    if (this.cookie.length) {
-      return this.cookie;
-    }
-
-    const payload = {
-      email: 'john@test.com',
-      id: new mongoose.Types.ObjectId().toHexString(),
-    };
-
-    const session = {
-      jwt: jwt.sign(payload, process.env.JWT_KEY!),
-    };
-    const sessionJSON = JSON.stringify(session);
-    const base64 = Buffer.from(sessionJSON).toString('base64');
-
-    this.cookie = [`session=${base64}`];
-    return this.cookie;
+const signin = () => {
+  if (cookie.length) {
+    return cookie;
   }
-
-  signout(): void {
-    this.cookie = [];
-  }
-
-  get(url: string) {
-    return request(app).get(url).set('Cookie', this.signin());
-  }
-
-  post(url: string) {
-    return request(app).post(url).set('Cookie', this.signin());
-  }
-
-  put(url: string) {
-    return request(app).put(url).set('Cookie', this.signin());
-  }
-
-  anonymized = {
-    get: (url: string) => {
-      return request(app).get(url).set('Cookie', []);
-    },
-    post: (url: string) => {
-      return request(app).post(url).set('Cookie', []);
-    },
-    put: (url: string) => {
-      return request(app).put(url).set('Cookie', []);
-    },
+  // build a jwt payload
+  const payload = {
+    email: 'john@test.com',
+    id: new mongoose.Types.ObjectId().toHexString(),
   };
-}
+  //Create the JWT
+  const session = {
+    jwt: jwt.sign(payload, process.env.JWT_KEY!),
+  };
+  const sessionJSON = JSON.stringify(session);
+  const base64 = Buffer.from(sessionJSON).toString('base64');
 
-const testapi = new Testapi();
-
-export default testapi;
+  cookie = [`session=${base64}`];
+  return cookie;
+};
 
 afterEach(() => {
-  testapi.signout();
+  cookie = [];
 });
+
+const testapi = {
+  signout() {
+    cookie = [];
+  },
+  get(url: string) {
+    return request(app).get(url).set('Cookie', signin());
+  },
+  post(url: string) {
+    return request(app).post(url).set('Cookie', signin());
+  },
+  put(url: string) {
+    return request(app).put(url).set('Cookie', signin());
+  },
+  anonymized: {
+    get(url: string) {
+      return request(app).get(url).set('Cookie', []);
+    },
+    post(url: string) {
+      return request(app).post(url).set('Cookie', []);
+    },
+    put(url: string) {
+      return request(app).put(url).set('Cookie', []);
+    },
+  },
+};
+
+export default testapi;
 
 export const objectId = () => {
   return new mongoose.Types.ObjectId().toHexString();
